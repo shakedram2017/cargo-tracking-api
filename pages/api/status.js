@@ -1,4 +1,12 @@
 export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*'); // מאפשר לכולם לבקש, אפשר לשים גם דומיין ספציפי
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end(); // תגובה לבקשות CORS preflight
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -10,7 +18,6 @@ export default async function handler(req, res) {
   }
 
   try {
-    // שימוש ב-fetch מובנה ב-Node 18+ (Vercel משתמש בגרסה מתקדמת של Node)
     const response = await fetch('https://api.cargo.co.il/Webservice/CheckShipmentStatusAndTimeRequest', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
