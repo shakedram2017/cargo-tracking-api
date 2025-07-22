@@ -1,4 +1,13 @@
 export default async function handler(req, res) {
+  // טיפול ב-CORS
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end(); // תשובה מהירה ל-preflight
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -22,13 +31,12 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    // תיקן שמות שדות בהתאם ל-API החיצוני + ברירת מחדל
     return res.status(200).json({
       status: data.deliveryStatus ?? null,
       statusText: data.DeliveryStatusText ?? 'לא ידוע',
-      deliveryTime: data.DiliveryTime ?? 'לא זמין',  // שמור על שם השדה כפי שה-API מחזיר (יש טעות כתיב ב-DiliveryTime)
+      deliveryTime: data.DiliveryTime ?? 'לא זמין',
       errorMsg: data.errorMsg ?? null,
-      rawData: data // אפשר להחזיר את כל התגובה לצורך בדיקות (לא חובה)
+      rawData: data
     });
   } catch (error) {
     return res.status(500).json({ error: 'Server error', details: error.message });
