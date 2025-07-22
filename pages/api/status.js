@@ -10,6 +10,7 @@ export default async function handler(req, res) {
   }
 
   try {
+    // שימוש ב-fetch מובנה ב-Node 18+ (Vercel משתמש בגרסה מתקדמת של Node)
     const response = await fetch('https://api.cargo.co.il/Webservice/CheckShipmentStatusAndTimeRequest', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
