@@ -1,0 +1,13 @@
+{
+  "name": "cargo-tracking-api",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "next": "latest"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  }
+}
