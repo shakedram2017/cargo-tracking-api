@@ -1,14 +1,15 @@
 export default async function handler(req, res) {
-  // הגדרת CORS:
-  res.setHeader('Access-Control-Allow-Origin', '*'); // או את הדומיין שלך אם תרצה לדייק
+  // הגדרות CORS
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  // טיפול בבקשת OPTIONS (Preflight)
+  // טיפול בבקשות OPTIONS (Preflight)
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
 
+  // רק POST מותר
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -37,7 +38,7 @@ export default async function handler(req, res) {
       statusText: data.DeliveryStatusText ?? 'לא ידוע',
       deliveryTime: data.DiliveryTime ?? 'לא זמין',
       errorMsg: data.errorMsg ?? null,
-      rawData: data
+      rawData: data // אופציונלי לצורכי בדיקה
     });
   } catch (error) {
     return res.status(500).json({ error: 'Server error', details: error.message });
